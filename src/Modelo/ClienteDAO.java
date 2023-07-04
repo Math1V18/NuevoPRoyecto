@@ -41,8 +41,6 @@ public class ClienteDAO {
         }
     }
     
-    
-    
     public List ListarCliente(){
         List<Cliente> ListCL = new ArrayList();
         
