@@ -964,6 +964,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="GUARDAR TODO"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnguardarProveedorActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnEditarProveedor">
               <Properties>
@@ -1263,6 +1266,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="GUARDAR TODO"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGuardarProActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnEditarPro">
               <Properties>

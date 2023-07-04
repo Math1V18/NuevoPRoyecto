@@ -3,6 +3,10 @@ package ferreteriafavi;
 
 import Modelo.Cliente;
 import Modelo.ClienteDAO;
+import Modelo.Productos;
+import Modelo.ProductosDAO;
+import Modelo.Proveedor;
+import Modelo.ProveedorDAO;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -12,6 +16,10 @@ public class Sistema extends javax.swing.JFrame {
 
     Cliente cl = new Cliente();
     ClienteDAO client = new ClienteDAO();
+    Proveedor pr = new Proveedor();
+    ProveedorDAO prDao = new ProveedorDAO();
+    Productos pro = new Productos();
+    ProductosDAO proDAO = new ProductosDAO();
     DefaultTableModel modelo = new DefaultTableModel();
     
     public Sistema() {
@@ -47,7 +55,6 @@ public class Sistema extends javax.swing.JFrame {
         }
     }
 
-    
     void verificar(){
         if (!"".equals(txtDniCliente.getText()) || !"".equals(txtNombreCliente.getText()) || !"".equals(txtTelefonoCliente.getText()) || !"".equals(txtDireccionCliente.getText())){
                 
@@ -60,6 +67,41 @@ public class Sistema extends javax.swing.JFrame {
                 client.RegistrarCliente(cl);
                 
                 JOptionPane.showMessageDialog(null, "Cliente Registrado");
+        }else{
+            JOptionPane.showMessageDialog(null, "ERROR| Ingrese todos los campos requeridos");
+        }
+    }
+    
+    void verificarPr() {
+        if (!"".equals(txtRucProveedor.getText()) || !"".equals(txtNombreProveedor.getText()) || !"".equals(txtTelefonoProveedor.getText()) || !"".equals(txtDireccionProveedor.getText()) || !"".equals(txtRazonProveedor.getText())){
+                
+                    pr.setRuc(Integer.parseInt(txtRucProveedor.getText()));
+                    pr.setNombre(txtNombreProveedor.getText());
+                    pr.setTelefono(Integer.parseInt(txtTelefonoProveedor.getText()));
+                    pr.setDireccion(txtDireccionProveedor.getText());
+                    pr.setRazon(txtRazonProveedor.getText());
+                
+                    prDao.RegistrarProveedor(pr);
+                
+                JOptionPane.showMessageDialog(null, "Proveedor Registrado");
+        }else{
+            JOptionPane.showMessageDialog(null, "ERROR| Ingrese todos los campos requeridos");
+        }
+    }
+    
+    void verificarPro(){
+        
+        if (!"".equals(txtCodigoPro.getText()) || !"".equals(txtDesPro.getText()) || !"".equals(cbxProveedor.getSelectedItem()) || !"".equals(txtCantPro.getText()) || !"".equals(txtPrecioPro.getText())){
+                
+                        pro.setCodigo(txtCodigoPro.getText());
+                        pro.setNombre(txtDesPro.getText());
+                        pro.setProveedor(cbxProveedor.getSelectedItem().toString());
+                        pro.setStock(Integer.parseInt(txtCantPro.getText()));
+                        pro.setPrecio(Double.parseDouble(txtPrecioPro.getText()));
+                
+                    proDAO.RegistrarProductos(pro);
+                
+                JOptionPane.showMessageDialog(null, "Productos Registrado");
         }else{
             JOptionPane.showMessageDialog(null, "ERROR| Ingrese todos los campos requeridos");
         }
@@ -591,6 +633,11 @@ public class Sistema extends javax.swing.JFrame {
 
         btnguardarProveedor.setBackground(new java.awt.Color(204, 204, 204));
         btnguardarProveedor.setText("GUARDAR TODO");
+        btnguardarProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnguardarProveedorActionPerformed(evt);
+            }
+        });
 
         btnEditarProveedor.setBackground(new java.awt.Color(204, 204, 204));
         btnEditarProveedor.setText("ACTUALIZAR");
@@ -640,7 +687,7 @@ public class Sistema extends javax.swing.JFrame {
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGap(104, 104, 104)
                                 .addComponent(jLabel29))
-                            .addComponent(btnguardarProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                            .addComponent(btnguardarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 130, Short.MAX_VALUE)
                             .addComponent(btnEliminarProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(62, 62, 62)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -768,6 +815,11 @@ public class Sistema extends javax.swing.JFrame {
 
         btnGuardarPro.setBackground(new java.awt.Color(204, 204, 204));
         btnGuardarPro.setText("GUARDAR TODO");
+        btnGuardarPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarProActionPerformed(evt);
+            }
+        });
 
         btnEditarPro.setBackground(new java.awt.Color(204, 204, 204));
         btnEditarPro.setText("ACTUALIZAR");
@@ -1095,6 +1147,18 @@ public class Sistema extends javax.swing.JFrame {
         ListarCliente();
         jTabbedPane1.setSelectedIndex(1);  
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnguardarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnguardarProveedorActionPerformed
+        // TODO add your handling code here:
+        
+        verificarPr() ;
+    }//GEN-LAST:event_btnguardarProveedorActionPerformed
+
+    private void btnGuardarProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProActionPerformed
+        // TODO add your handling code here:
+        
+        verificarPro();
+    }//GEN-LAST:event_btnGuardarProActionPerformed
 
     /**
      * @param args the command line arguments
