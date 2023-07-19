@@ -7,6 +7,7 @@ import Modelo.Productos;
 import Modelo.ProductosDAO;
 import Modelo.Proveedor;
 import Modelo.ProveedorDAO;
+import Reportes.Excel;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -103,10 +104,7 @@ public class Sistema extends javax.swing.JFrame {
                 LimpiarCliente();
                 ListarCliente();
                 
-            }else {
-                JOptionPane.showInputDialog(null, "Seleccione una fila");
-            }
-            
+            }   
         }
     }
     
@@ -192,12 +190,8 @@ public class Sistema extends javax.swing.JFrame {
                 LimpiarTabla();
                 ListarProveedor();
                 LimpiarProveedor();
-                
-                
-            }else {
-                JOptionPane.showInputDialog(null, "Seleccione una fila");
-            }
-            
+    
+            }    
         }
     }
     
@@ -237,7 +231,11 @@ public class Sistema extends javax.swing.JFrame {
                         pro.setStock(Integer.parseInt(txtCantPro.getText()));
                         pro.setPrecio(Double.parseDouble(txtPrecioPro.getText()));
                 
-                    proDAO.RegistrarProductos(pro);
+                        proDAO.RegistrarProductos(pro);
+                        
+                         LimpiarTabla();
+                         LimpiarProductos();
+                         ListarProductos();
                 
                 JOptionPane.showMessageDialog(null, "Productos Registrado");
         }else{
@@ -267,7 +265,53 @@ public class Sistema extends javax.swing.JFrame {
         TableProducto.setModel(modelo);
     }
     
+    void EliminarPro() {
+        if (!"".equals(txtidPro.getText())){
+            
+            int pregunta = JOptionPane.showConfirmDialog(null, "Estas seguro de eliminar fila?");
+            
+            if (pregunta == 0 ){
+                
+                int id = Integer.parseInt(txtidPro.getText());
+                proDAO.EliminarProductos(id);
+                
+                LimpiarTabla();
+                ListarProductos();
+                LimpiarProductos();
+                
+                
+            }    
+        }
+    }
 
+    void editarPro(){
+        if("".equals(txtidPro.getText())){
+            
+            JOptionPane.showMessageDialog(null, "Seleccione una fila");
+            
+        }else{
+            
+            if(!"".equals(txtCodigoPro.getText()) && !"".equals(txtDesPro.getText()) && !"".equals(txtCantPro.getText()) && !"".equals(txtPrecioPro.getText())) {
+               
+                pro.setCodigo(txtCodigoPro.getText());
+                pro.setNombre(txtDesPro.getText());
+                pro.setProveedor(cbxProveedorPro.getSelectedItem().toString());
+                pro.setStock(Integer.parseInt(txtCantPro.getText()));
+                pro.setPrecio(Double.parseDouble(txtPrecioPro.getText()));
+                pro.setId(Integer.parseInt(txtidPro.getText()));
+                proDAO.ModificarProductos(pro);
+                LimpiarTabla();
+                LimpiarProductos();
+                ListarProductos();
+                
+                JOptionPane.showMessageDialog(null, "Producto Modificado");
+            }else{
+                JOptionPane.showMessageDialog(null, "Campos vacios");
+            }
+        }
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -367,6 +411,7 @@ public class Sistema extends javax.swing.JFrame {
         btnEliminarPro = new javax.swing.JButton();
         btnNuevoPro = new javax.swing.JButton();
         txtIdPro = new javax.swing.JTextField();
+        btnExcel = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         TableVentas = new javax.swing.JTable();
@@ -906,7 +951,7 @@ public class Sistema extends javax.swing.JFrame {
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGap(104, 104, 104)
                                 .addComponent(jLabel29))
-                            .addComponent(btnguardarProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 130, Short.MAX_VALUE)
+                            .addComponent(btnguardarProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                             .addComponent(btnEliminarProveedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(62, 62, 62)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -1047,6 +1092,11 @@ public class Sistema extends javax.swing.JFrame {
 
         btnEditarPro.setBackground(new java.awt.Color(204, 204, 204));
         btnEditarPro.setText("ACTUALIZAR");
+        btnEditarPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarProActionPerformed(evt);
+            }
+        });
 
         btnEliminarPro.setBackground(new java.awt.Color(204, 204, 204));
         btnEliminarPro.setText("ELIMINAR");
@@ -1061,6 +1111,19 @@ public class Sistema extends javax.swing.JFrame {
         btnNuevoPro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevoProActionPerformed(evt);
+            }
+        });
+
+        txtIdPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdProActionPerformed(evt);
+            }
+        });
+
+        btnExcel.setText("Reporte");
+        btnExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcelActionPerformed(evt);
             }
         });
 
@@ -1099,10 +1162,13 @@ public class Sistema extends javax.swing.JFrame {
                         .addGap(57, 57, 57)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnEditarPro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnNuevoPro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(btnNuevoPro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(86, 86, 86)
+                        .addComponent(btnExcel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 515, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1141,11 +1207,13 @@ public class Sistema extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnEliminarPro, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-                            .addComponent(btnNuevoPro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(btnNuevoPro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(32, 32, 32)
+                        .addComponent(btnExcel))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(117, Short.MAX_VALUE))
+                .addContainerGap(123, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("tab4", jPanel5);
@@ -1332,6 +1400,8 @@ public class Sistema extends javax.swing.JFrame {
 
     private void btnEliminarProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProActionPerformed
         // TODO add your handling code here:
+        
+        EliminarPro();
     }//GEN-LAST:event_btnEliminarProActionPerformed
 
     private void btnNuevoProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProActionPerformed
@@ -1340,7 +1410,6 @@ public class Sistema extends javax.swing.JFrame {
 
     private void btnGuardarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarClienteActionPerformed
         // TODO add your handling code here:
-        
         verificar();
     }//GEN-LAST:event_btnGuardarClienteActionPerformed
 
@@ -1425,15 +1494,32 @@ public class Sistema extends javax.swing.JFrame {
     private void TableProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableProductoMouseClicked
         // TODO add your handling code here:
         
-        int fila = TableProveedor.rowAtPoint(evt.getPoint());
-        txtidProveedor.setText(TableProveedor.getValueAt(fila, 0).toString());
-        txtRucProveedor.setText(TableProveedor.getValueAt(fila, 1).toString());
-        txtNombreProveedor.setText(TableProveedor.getValueAt(fila, 2).toString());
-        txtTelefonoProveedor.setText(TableProveedor.getValueAt(fila, 3).toString());
-        txtDireccionProveedor.setText(TableProveedor.getValueAt(fila, 4).toString());
-        txtRazonProveedor.setText(TableProveedor.getValueAt(fila, 5).toString());
+        int fila = TableProducto.rowAtPoint(evt.getPoint());
+        txtidPro.setText(TableProducto.getValueAt(fila, 0).toString());
+        txtCodigoPro.setText(TableProducto.getValueAt(fila, 1).toString());
+        txtDesPro.setText(TableProducto.getValueAt(fila, 2).toString());
+        cbxProveedorPro.setSelectedItem(TableProducto.getValueAt(fila, 3).toString());
+        txtCantPro.setText(TableProducto.getValueAt(fila, 4).toString());
+        txtPrecioPro.setText(TableProducto.getValueAt(fila, 5).toString());
         
     }//GEN-LAST:event_TableProductoMouseClicked
+
+    private void btnEditarProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarProActionPerformed
+        // TODO add your handling code here:
+        
+        editarPro();
+    
+    }//GEN-LAST:event_btnEditarProActionPerformed
+
+    private void txtIdProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdProActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdProActionPerformed
+
+    private void btnExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelActionPerformed
+        // TODO add your handling code here:
+        
+        Excel.reporte();
+    }//GEN-LAST:event_btnExcelActionPerformed
 
     
     
@@ -1453,6 +1539,17 @@ public class Sistema extends javax.swing.JFrame {
         txtDireccionProveedor.setText("");
         txtRazonProveedor.setText("");
     }
+    private void LimpiarProductos(){
+        txtidPro.setText("");
+        txtCodigoPro.setText("");
+        cbxProveedorPro.setSelectedItem(null);
+        txtDesPro.setText("");
+        txtCantPro.setText("");
+        txtPrecioPro.setText("");
+    }
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -1504,6 +1601,7 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JButton btnEliminarPro;
     private javax.swing.JButton btnEliminarProveedor;
     private javax.swing.JButton btnEliminarVenta;
+    private javax.swing.JButton btnExcel;
     private javax.swing.JButton btnGenerarVenta;
     private javax.swing.JButton btnGuardarCliente;
     private javax.swing.JButton btnGuardarPro;

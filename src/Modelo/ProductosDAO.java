@@ -89,5 +89,54 @@ public class ProductosDAO {
         return Listapro;
     }
     
+    public boolean EliminarProductos(int id){
+        
+        String sql = "DELETE FROM productos WHERE id = ?";
+        try{
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.execute();
+            return true;
+        }catch (SQLException e){
+            
+            System.out.println(e.toString());
+            return false;
+        }finally{
+            try{
+                con.close();
+            }catch (SQLException e) {
+                System.out.println(e.toString());
+            }
+        }
+    }
+    
+    public boolean ModificarProductos(Productos pro){
+        
+        String sql = "UPDATE productos SET codigo=?, nombre=?, proveedor=?, stock=?, precio=? WHERE id=?";
+        
+        try{
+            
+            ps = con.prepareStatement(sql);
+            ps.setString(1, pro.getCodigo());
+            ps.setString(2, pro.getNombre());
+            ps.setString(3, pro.getProveedor());
+            ps.setInt(4, pro.getStock());
+            ps.setDouble(5, pro.getPrecio());
+            ps.setInt(6, pro.getId());
+            ps.execute();
+            return true;
+            
+        }catch (SQLException e){
+            System.out.println(e.toString());
+            return false;
+        }finally{
+            try{
+                con.close();
+            }catch(SQLException e){
+                System.out.println(e.toString());
+            }
+        }
+    }
     
 }
