@@ -139,4 +139,54 @@ public class ProductosDAO {
         }
     }
     
+    public Productos BuscarPro (String cod){
+    
+        Productos producto = new Productos();
+        
+        String sql = "SELECT * FROM productos WHERE codigo = ?";
+        
+        try{
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, cod);
+            rs = ps.executeQuery();
+            
+            if (rs.next()){
+                producto.setNombre(rs.getString("nombre"));
+                producto.setPrecio(rs.getDouble("precio"));
+                producto.setStock(rs.getInt("stock"));
+                
+            }
+        }catch(SQLException e){
+            System.out.println(e.toString());
+        }
+        return producto;
+    }
+    
+    public Config Buscardatos (){
+    
+        Config conf = new Config();
+        
+        String sql = "SELECT * FROM config";
+        
+        try{
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            
+            if (rs.next()){
+                conf.setId(rs.getInt("id"));
+                conf.setRuc(rs.getInt("ruc"));
+                conf.setNombre(rs.getString("nombre"));
+                conf.setTelefono(rs.getInt("telefono"));
+                conf.setDireccion(rs.getString("Direccion"));
+                conf.setRazon(rs.getString("razon"));
+           
+            }
+        }catch(SQLException e){
+            System.out.println(e.toString());
+        }
+        return conf;
+    }
+    
 }
